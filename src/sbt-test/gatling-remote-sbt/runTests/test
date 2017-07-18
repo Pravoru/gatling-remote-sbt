@@ -1,0 +1,22 @@
+> gatling:testOnlyRemote basic.BasicExampleSimulationFails
+$ exists target/universal/stage/lib/runtests-Gatling.jar
+$ exists target/universal/stage/bin/run.sh
+$ exists target/universal/stage/conf/gatling.conf
+$ exists target/universal/stage/conf/gatling-akka.conf
+$ exists target/universal/stage/conf/logback.xml
+$ exists target/scala-2.11/gatling-classes/basic/BasicExampleSimulationFails.class
+$ exists target/scala-2.11/gatling-classes/basic/BasicExampleSimulationSucceeds.class
+$ exists target/scala-2.11/gatling-classes/unit/Spec$$anonfun$1.class
+$ exists target/scala-2.11/gatling-classes/unit/Spec.class
+
+# > gatling-it:testOnlyRemote
+# $ exists target/universal/stage/lib/runtests-gatling-it.jar
+# $ exists target/universal/stage/bin/run.sh
+# $ exists target/scala-2.11/it-classes/basic/BasicItExampleSimulationFails.class
+# $ exists target/scala-2.11/it-classes/basic/BasicItExampleSimulationSucceeds.class
+# $ exists target/scala-2.11/it-classes/integration/ItSpec$$anonfun$1.class
+# $ exists target/scala-2.11/it-classes/integration/ItSpec.class
+
+
+
+
