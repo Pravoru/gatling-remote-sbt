@@ -1,6 +1,6 @@
 name := "gatling-remote-sbt"
 
-organization := "com.pravoru"
+organization := "ru.pravo"
 
 version := "1.0-SNAPSHOT"
 
