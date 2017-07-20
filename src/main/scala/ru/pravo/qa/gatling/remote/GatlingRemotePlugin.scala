@@ -1,6 +1,6 @@
-package com.pravoru.qa.gatling.remote
+package ru.pravo.qa.gatling.remote
 
-import com.pravoru.qa.gatling.remote.GatlingRemoteTasks._
+import ru.pravo.qa.gatling.remote.GatlingRemoteTasks._
 import com.typesafe.sbt.SbtNativePackager._
 import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
 import com.typesafe.sbt.packager.universal.UniversalPlugin.autoImport.stage

@@ -1,8 +1,8 @@
-package com.pravoru.qa.gatling.remote
+package ru.pravo.qa.gatling.remote
 
 import java.io.File
 
-import com.pravoru.qa.gatling.remote.GatlingRemoteKeys._
+import ru.pravo.qa.gatling.remote.GatlingRemoteKeys._
 import com.typesafe.sbt.packager.universal.UniversalPlugin.autoImport._
 import sbt.Keys._
 import sbt.complete.DefaultParsers._

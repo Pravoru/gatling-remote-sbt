@@ -1,3 +1,3 @@
-package com.pravoru.qa.gatling.remote
+package ru.pravo.qa.gatling.remote
 
 case class Host(url: String, login: String, password: String, port: Int)

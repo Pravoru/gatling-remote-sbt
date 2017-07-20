@@ -1,4 +1,4 @@
-package com.pravoru.qa.gatling.remote
+package ru.pravo.qa.gatling.remote
 
 import sbt._
 
