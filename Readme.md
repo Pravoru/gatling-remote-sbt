@@ -30,7 +30,7 @@ enablePlugins(GatlingPlugin, JavaAppPackaging, GatlingRemotePlugin)
 There are multiple setting for configuration:
 
 Setting | Description | Default 
----------------------
+------- | ----------- | -------
 |`gatlingConfigFilePath`|Path to `gatling.conf` file|`src/test/gatling.conf`|
 |`gatlingAkkaConfigFilePath`|Path to `gatling-akka.conf` file|`src/test/gatling-akka.conf`|
 |`gatlingRemoteConfigFilePath`|Path to `gatling-remote.conf` file|`src/main/gatling-remote.conf`|
