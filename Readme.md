@@ -25,6 +25,18 @@ addSbtPlugin("io.gatling" % "gatling-sbt" % "2.2.1")
 enablePlugins(GatlingPlugin, JavaAppPackaging, GatlingRemotePlugin)
 ```
 
+`gatling-remote.conf`
+```
+hosts = [
+  {
+    host = "localhost",
+    login = "root",
+    password = "root",
+    port = 2222
+  }
+]
+```
+
 ## Configuration
 
 There are multiple setting for configuration:
@@ -47,3 +59,15 @@ gatlingConfigFilePath in Gatling := (resourceDirectory in Compile).value / "gatl
 ```
 
 will force plugin to take `gatling.conf` from `/src/resources/gatling.conf`
+
+## Using
+
+Run simulation
+```bash
+sbt gatling:testOnlyRemote basic.BasicExampleSimulationFails
+```
+
+Get assembled project 
+```bash
+sbt gatling:assembleProject
+```
