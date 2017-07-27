@@ -43,10 +43,10 @@ There are multiple setting for configuration:
 
 Setting | Description | Default 
 ------- | ----------- | -------
-|`gatlingConfigFilePath`|Path to `gatling.conf` file|`src/test/gatling.conf`|
-|`gatlingAkkaConfigFilePath`|Path to `gatling-akka.conf` file|`src/test/gatling-akka.conf`|
-|`gatlingRemoteConfigFilePath`|Path to `gatling-remote.conf` file|`src/main/gatling-remote.conf`|
-|`logbackConfigFilePath`|Path to `logback.xml` file|`src/test/logback.xml`|
+|`gatlingConfigFilePath`|Path to `gatling.conf` file|`src/test/resources/gatling.conf`|
+|`gatlingAkkaConfigFilePath`|Path to `gatling-akka.conf` file|`src/test/resources/gatling-akka.conf`|
+|`gatlingRemoteConfigFilePath`|Path to `gatling-remote.conf` file|`src/main/resources/gatling-remote.conf`|
+|`logbackConfigFilePath`|Path to `logback.xml` file|`src/test/resources/logback.xml`|
 |`remoteWorkDirectoryPath`|Path to work directory on remote server|`/tmp`|
 |`deployTimeoutDuration`|Timeout for deploying operation|`Infinite`|
 |`runTimeoutDuration`|Timeout for running operation|`Infinite`|
