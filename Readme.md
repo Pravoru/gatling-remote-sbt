@@ -15,7 +15,7 @@ This plugin brings ability to run simulation remotely through ssh.
 
 `plugins.sbt`
 ```scala
-addSbtPlugin("ru.pravo" % "gatling-remote-sbt" % version)
+addSbtPlugin("ru.pravo" % "gatling-remote-sbt" % "0.1")
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.2.0")
 addSbtPlugin("io.gatling" % "gatling-sbt" % "2.2.1")
 ```
