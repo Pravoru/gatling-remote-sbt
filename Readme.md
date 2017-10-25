@@ -11,7 +11,7 @@ This plugin brings ability to run simulation remotely through ssh.
 * [sbt-native-packager](https://github.com/sbt/sbt-native-packager)
 * [sshj](https://github.com/hierynomus/sshj)
 
-## Instalation
+## Installation
 We mimic gatling-sbt versioning. For our purposes we use fourth digit in version number. 
 
 `plugins.sbt`
