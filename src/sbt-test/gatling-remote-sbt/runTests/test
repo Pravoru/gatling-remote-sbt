@@ -1,6 +1,7 @@
 > gatling:testOnlyRemote basic.BasicExampleSimulationFails
 $ exists target/universal/stage/lib/runtests-Gatling.jar
 $ exists target/universal/stage/bin/run.sh
+$ exists target/universal/stage/bin/run.sh
 $ exists target/universal/stage/conf/gatling.conf
 $ exists target/universal/stage/conf/gatling-akka.conf
 $ exists target/universal/stage/conf/logback.xml

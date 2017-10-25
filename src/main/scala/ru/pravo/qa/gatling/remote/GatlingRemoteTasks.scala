@@ -50,9 +50,11 @@ object GatlingRemoteTasks {
     val aggregatedClassFiles = aggregateClassFiles(config).value.map { file =>
       file -> file.getAbsolutePath.replace(s"${baseDirectory.value.absolutePath}${File.separator}", "")
     }
-    val materializedBinScript = materializeBinScript(config).value → "bin/run.sh"
+    val materializedBinScript = materializeBinScripts(config).value.map{ file ⇒
+      file → s"bin/${file.getName}"
+    }
     val gatlingConfigFiles = getGatlingConfigFiles(config).value
-    gatlingConfigFiles ++ aggregatedClassFiles :+ materializedBinScript :+ assembledTests
+    gatlingConfigFiles ++ aggregatedClassFiles ++ materializedBinScript :+ assembledTests
   }
 
   def deployFiles(
@@ -115,12 +117,14 @@ object GatlingRemoteTasks {
     (packageBin in config).value
   }
 
-  private def materializeBinScript(config: Configuration): Def.Initialize[Task[File]] = Def.task {
-    val content = Source.fromInputStream(getClass.getResourceAsStream("/run.sh")).mkString
-      .replace("grafiteRootPathPrefix", (grafiteRootPathPrefix in config).value)
-    val tempFile = taskTemporaryDirectory.value / "run.sh"
-    IO.write(tempFile, content)
-    tempFile
+  private def materializeBinScripts(config: Configuration): Def.Initialize[Task[List[File]]] = Def.task {
+    List("run.sh", "run.bat").map { file ⇒
+      val content = Source.fromInputStream(getClass.getResourceAsStream(s"/$file")).mkString
+        .replace("grafiteRootPathPrefix", (grafiteRootPathPrefix in config).value)
+      val tempFile = taskTemporaryDirectory.value / file
+      IO.write(tempFile, content)
+      tempFile
+    }
   }
 
 

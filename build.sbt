@@ -2,7 +2,7 @@ name := "gatling-remote-sbt"
 
 organization := "ru.pravo"
 
-version := "2.2.2.0"
+version := "2.2.2.1"
 
 scalaVersion := "2.10.6"
 

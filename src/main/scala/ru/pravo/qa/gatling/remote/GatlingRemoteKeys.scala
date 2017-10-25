@@ -15,6 +15,6 @@ object GatlingRemoteKeys {
   val remoteWorkDirectoryPath: TaskKey[String] = taskKey("Path to work directory on remote server")
   val deployTimeoutDuration: TaskKey[Duration] = taskKey("Timeout for deploying operation")
   val runTimeoutDuration: TaskKey[Duration] = taskKey("Timeout for running operation")
-  val grafiteRootPathPrefix: TaskKey[String] = taskKey("Root path that will be overwritten in run.sh")
+  val grafiteRootPathPrefix: TaskKey[String] = taskKey("Root path that will be overwritten in run scripts")
 
 }
