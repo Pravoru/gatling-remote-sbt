@@ -16,7 +16,7 @@ We mimic gatling-sbt versioning. For our purposes we use fourth digit in version
 
 `plugins.sbt`
 ```scala
-addSbtPlugin("ru.pravo" % "gatling-remote-sbt" % "2.2.2.0")
+addSbtPlugin("ru.pravo" % "gatling-remote-sbt" % "2.2.2.2")
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.2.0")
 addSbtPlugin("io.gatling" % "gatling-sbt" % "2.2.2")
 ```
@@ -52,6 +52,8 @@ Setting | Description | Default
 |`deployTimeoutDuration`|Timeout for deploying operation|`Infinite`|
 |`runTimeoutDuration`|Timeout for running operation|`Infinite`|
 |`grafiteRootPathPrefix`|Root path that will be overwritten in run.sh|`gatling`|
+|`configurationFiles`|Configuration files that will be deployed into /conf directory|`Seq(gatling.conf, gatling-akka.conf, gatling-remote.conf, logback.xml)`|
+|`userFilesDataFiles`|User files that will be deployed into /user-files/body directory|`Seq()`|
 
 You can override any of these settings. For example 
 

@@ -3,10 +3,9 @@ package ru.pravo.qa.gatling.remote
 import java.io.File
 
 import ru.pravo.qa.gatling.remote.GatlingRemoteKeys._
-import com.typesafe.sbt.packager.universal.UniversalPlugin.autoImport._
 import sbt.Keys._
 import sbt.complete.DefaultParsers._
-import sbt._
+import sbt.{Def, _}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -19,7 +18,8 @@ object GatlingRemoteTasks {
     val args: Seq[String] = spaceDelimited("<arg>").parsed
 
     val log = streams.value.log
-    val directory = (stage in Universal).value
+    asserts(config)
+    val directory = (assembleProject in config).value
     val gatlingRemoteConfigFile = (gatlingRemoteConfigFilePath in config).value
     val remoteHosts = GatlingRemoteConfig(gatlingRemoteConfigFile).hosts
     val workDirectory = (remoteWorkDirectoryPath in config).value
@@ -53,8 +53,12 @@ object GatlingRemoteTasks {
     val materializedBinScript = materializeBinScripts(config).value.map{ file ⇒
       file → s"bin/${file.getName}"
     }
-    val gatlingConfigFiles = getGatlingConfigFiles(config).value
-    gatlingConfigFiles ++ aggregatedClassFiles ++ materializedBinScript :+ assembledTests
+
+    configurationFilesToMapping(config).value ++
+      userFilesDataFilesToMapping(config).value ++
+      aggregatedClassFiles ++
+      materializedBinScript :+
+      assembledTests
   }
 
   def deployFiles(
@@ -127,21 +131,51 @@ object GatlingRemoteTasks {
     }
   }
 
+  private def asserts(config: Configuration): Def.Initialize[Task[Unit]] = Def.task {
 
-  def getGatlingConfigFiles(config: Configuration): Def.Initialize[Task[Seq[(File, String)]]] = Def.task {
-    val gatlingConfigFile = (gatlingConfigFilePath in config).value
-    val gatlingAkkaConfigFile = (gatlingAkkaConfigFilePath in config).value
-    val gatlingRemoteConfig = (gatlingRemoteConfigFilePath in config).value
-    val logbackConfigFile = (logbackConfigFilePath in config).value
-    assert(gatlingConfigFile.exists(), s"File ${gatlingConfigFile.getAbsolutePath} is not founded")
-    assert(gatlingAkkaConfigFile.exists(), s"File ${gatlingConfigFile.getAbsolutePath} is not founded")
-    assert(logbackConfigFile.exists(), s"File ${gatlingConfigFile.getAbsolutePath} is not founded")
-    Seq(
-      gatlingConfigFile → "conf/gatling.conf",
-      gatlingAkkaConfigFile → "conf/gatling-akka.conf",
-      gatlingRemoteConfig → "conf/gatling-remote.conf",
-      logbackConfigFile → "conf/logback.xml"
-    )
+    def fileAssert(file: File): Unit = {
+      assert(
+        file.exists(),
+        s"File ${file.getAbsolutePath} is not founded"
+      )
+    }
+
+    fileAssert(ConfigurationFiles.gatlingConfigFile(config).value)
+    fileAssert(ConfigurationFiles.gatlingAkkaConfigFile(config).value)
+    fileAssert(ConfigurationFiles.gatlingRemoteConfigFile(config).value)
   }
 
+  private def configurationFilesToMapping(config: Configuration): Def.Initialize[Task[Seq[(File, String)]]] = Def.task {
+    val gatlingConfigFile = ConfigurationFiles.gatlingConfigFile(config).value
+    configurationFiles.value.map { file ⇒
+      file → s"${BundleDirectoriesStructure(gatlingConfigFile).configurationDirectory}/${file.name}"
+    }
+  }
+
+  private def userFilesDataFilesToMapping(config: Configuration): Def.Initialize[Task[Seq[(File, String)]]] = Def.task {
+    val gatlingConfigFile = ConfigurationFiles.gatlingConfigFile(config).value
+    userFilesDataFiles.value.flatMap { file ⇒
+      if (file.isFile) {
+        Seq(file → s"${BundleDirectoriesStructure(gatlingConfigFile).userFilesDataDirectory}/${file.name}")
+      } else {
+        file.***.get.map { file ⇒
+          //We do not know where file came from
+          val testResourceDirectoryAbsolutePath = (resourceDirectory in config).value.getAbsolutePath
+          val mainResourceDirectoryAbsolutePath = (resourceDirectory in Compile).value.getAbsolutePath
+          val getAbsolutePath = file.getAbsolutePath
+          val filePath = file.getAbsolutePath
+            .replace(testResourceDirectoryAbsolutePath, "")
+            .replace(mainResourceDirectoryAbsolutePath, "")
+          file → s"${BundleDirectoriesStructure(gatlingConfigFile).userFilesDataDirectory}/$filePath"
+        }
+      }
+    }
+  }
+
+  def removesFileFromJar(config: Configuration): Def.Initialize[Task[Seq[(File, String)] ⇒ Seq[(File, String)]]] = Def.task { ms: Seq[(File, String)] ⇒
+    val configFiles = configurationFiles.value ++ userFilesDataFiles.value
+    ms filter {
+      case (file, toPath)  => !configFiles.contains(file)
+    }
+  }
 }
