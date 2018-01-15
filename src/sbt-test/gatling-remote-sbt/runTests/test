@@ -12,7 +12,7 @@ $ exists target/universal/stage/target/scala-2.12/gatling-classes/basic/BasicExa
 $ exists target/universal/stage/target/scala-2.12/gatling-classes/unit/Spec.class
 $ exists target/universal/stage/user-files/data/users.csv
 $ exists target/universal/stage/user-files/data/files/users.csv
-$ exec jar xf target/universal/stage/lib/default.runtests-0.1-SNAPSHOT.jar
+$ exec jar xf target/universal/stage/lib/default.runtests-0.1.0-SNAPSHOT.jar
 $ absent gatling.conf
 $ absent gatling-akka.conf
 $ absent logback.xml
