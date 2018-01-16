@@ -27,6 +27,7 @@ object GatlingRemoteTasks {
     val deployTimeout = (deployTimeoutDuration in config).value
     val runTimeout = (runTimeoutDuration in config).value
 
+    log.info("Deploying assembled tests.")
     deployFiles(
       workDirectory = workDirectory,
       projectName = projectName,
@@ -34,7 +35,9 @@ object GatlingRemoteTasks {
       timeout = deployTimeout,
       assembledDirectory = directory
     )
+    log.info("Done deploying.")
 
+    log.info("Running test on remote hosts.")
     runSimulation(
       simulationName = args.head,
       workDirectory = workDirectory,
@@ -42,6 +45,7 @@ object GatlingRemoteTasks {
       hosts = remoteHosts,
       timeout = runTimeout
     )
+    log.info("Done running.")
 
   }
 
