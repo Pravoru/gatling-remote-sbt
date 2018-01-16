@@ -28,12 +28,24 @@ object GatlingRemotePlugin extends AutoPlugin {
     // I think this is a bad code, but mappings in (Compile, packageBin) ~= removesFileFromJar(config).value do not work.
     // Also we need to have an ability to determine where files are instead of removing them from main and test
     mappings in (Compile, packageBin) := (mappings in (Compile, packageBin)).value.filter { case (file, toPath) ⇒
-      val configFiles = configurationFiles.value ++ userFilesDataFiles.value
-      configFiles.contains(file)
+      val resourceDirectoryAbsolutePath = (resourceDirectory in Compile).value.getAbsolutePath
+      val classDirectoryAbsolutePath = (classDirectory in (Compile, packageBin)).value.getAbsolutePath
+
+      val fileCleanPath = file.getAbsolutePath.replace(classDirectoryAbsolutePath, "")
+      val configFilesCleanPaths = (configurationFiles.value ++ userFilesDataFiles.value)
+        .map(i ⇒ i.getAbsolutePath.replace(resourceDirectoryAbsolutePath, ""))
+
+      !configFilesCleanPaths.contains(fileCleanPath)
     },
-    mappings in (config, packageBin) := (mappings in (Compile, packageBin)).value.filter { case (file, toPath) ⇒
-      val configFiles = configurationFiles.value ++ userFilesDataFiles.value
-      configFiles.contains(file)
+    mappings in (config, packageBin) := (mappings in (config, packageBin)).value.filter { case (file, toPath) ⇒
+      val resourceDirectoryAbsolutePath = (resourceDirectory in config).value.getAbsolutePath
+      val classDirectoryAbsolutePath = (classDirectory in (config, packageBin)).value.getAbsolutePath
+
+      val fileCleanPath = file.getAbsolutePath.replace(classDirectoryAbsolutePath, "")
+      val configFilesCleanPaths = (configurationFiles.value ++ userFilesDataFiles.value)
+        .map(i ⇒ i.getAbsolutePath.replace(resourceDirectoryAbsolutePath, ""))
+
+      !configFilesCleanPaths.contains(fileCleanPath)
     },
     testOnlyRemote := testOnlyRemoteTask(config).evaluated,
     mappings in Universal ++= generateMapping(config).value,
