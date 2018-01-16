@@ -27,6 +27,7 @@ object GatlingRemoteTasks {
     val deployTimeout = (deployTimeoutDuration in config).value
     val runTimeout = (runTimeoutDuration in config).value
 
+    log.info("Deploying assembled tests.")
     deployFiles(
       workDirectory = workDirectory,
       projectName = projectName,
@@ -34,7 +35,9 @@ object GatlingRemoteTasks {
       timeout = deployTimeout,
       assembledDirectory = directory
     )
+    log.info("Done deploying.")
 
+    log.info("Running test on remote hosts.")
     runSimulation(
       simulationName = args.head,
       workDirectory = workDirectory,
@@ -42,15 +45,17 @@ object GatlingRemoteTasks {
       hosts = remoteHosts,
       timeout = runTimeout
     )
+    log.info("Done running.")
 
   }
 
   def generateMapping(config: Configuration): Def.Initialize[Task[Seq[(File, String)]]] = Def.task {
+    val baseDirectoryValue = baseDirectory.value
     val assembledTests = assembleTests(config).value → s"lib/${name.value}-${config.name}.jar"
     val aggregatedClassFiles = aggregateClassFiles(config).value.map { file =>
-      file -> file.getAbsolutePath.replace(s"${baseDirectory.value.absolutePath}${File.separator}", "")
+      file -> file.getAbsolutePath.replace(s"${baseDirectoryValue.absolutePath}${File.separator}", "")
     }
-    val materializedBinScript = materializeBinScripts(config).value.map{ file ⇒
+    val materializedBinScript = materializeBinScripts(config).value.map { file ⇒
       file → s"bin/${file.getName}"
     }
 
@@ -122,10 +127,12 @@ object GatlingRemoteTasks {
   }
 
   private def materializeBinScripts(config: Configuration): Def.Initialize[Task[List[File]]] = Def.task {
+    val grafiteRootPathPrefixValue = (grafiteRootPathPrefix in config).value
+    val taskTemporaryDirectoryValue = taskTemporaryDirectory.value
     List("run.sh", "run.bat").map { file ⇒
       val content = Source.fromInputStream(getClass.getResourceAsStream(s"/$file")).mkString
-        .replace("grafiteRootPathPrefix", (grafiteRootPathPrefix in config).value)
-      val tempFile = taskTemporaryDirectory.value / file
+        .replace("grafiteRootPathPrefix", grafiteRootPathPrefixValue)
+      val tempFile = taskTemporaryDirectoryValue / file
       IO.write(tempFile, content)
       tempFile
     }
@@ -154,14 +161,16 @@ object GatlingRemoteTasks {
 
   private def userFilesDataFilesToMapping(config: Configuration): Def.Initialize[Task[Seq[(File, String)]]] = Def.task {
     val gatlingConfigFile = ConfigurationFiles.gatlingConfigFile(config).value
+    val resourceDirectoryValue = (resourceDirectory in config).value
+    val resourceDirectoryInCompileValue = (resourceDirectory in Compile).value
     userFilesDataFiles.value.flatMap { file ⇒
       if (file.isFile) {
         Seq(file → s"${BundleDirectoriesStructure(gatlingConfigFile).userFilesDataDirectory}/${file.name}")
       } else {
-        file.***.get.map { file ⇒
+        file.**(AllPassFilter).get.map { file ⇒
           //We do not know where file came from
-          val testResourceDirectoryAbsolutePath = (resourceDirectory in config).value.getAbsolutePath
-          val mainResourceDirectoryAbsolutePath = (resourceDirectory in Compile).value.getAbsolutePath
+          val testResourceDirectoryAbsolutePath = resourceDirectoryValue.getAbsolutePath
+          val mainResourceDirectoryAbsolutePath = resourceDirectoryInCompileValue.getAbsolutePath
           val getAbsolutePath = file.getAbsolutePath
           val filePath = file.getAbsolutePath
             .replace(testResourceDirectoryAbsolutePath, "")
@@ -172,10 +181,14 @@ object GatlingRemoteTasks {
     }
   }
 
-  def removesFileFromJar(config: Configuration): Def.Initialize[Task[Seq[(File, String)] ⇒ Seq[(File, String)]]] = Def.task { ms: Seq[(File, String)] ⇒
-    val configFiles = configurationFiles.value ++ userFilesDataFiles.value
-    ms filter {
-      case (file, toPath)  => !configFiles.contains(file)
+  def removesFileFromJar(config: Configuration): Def.Initialize[Task[Seq[(File, String)] ⇒ Seq[(File, String)]]] = Def.task {
+    val configurationFilesValue = configurationFiles.value
+    val userFilesDataFilesValue = userFilesDataFiles.value
+    ms: Seq[(File, String)] ⇒ {
+      val configFiles = configurationFilesValue ++ userFilesDataFilesValue
+      ms filter {
+        case (file, toPath) => !configFiles.contains(file)
+      }
     }
   }
 }
