@@ -13,11 +13,11 @@ class BundleDirectoriesStructure(gatlingConf: File) {
   val configurationDirectory: String = "conf"
 
   val userFilesDataDirectory: String = {
-    val path = "gatling.core.directory.data"
+    val path = "gatling.core.directory.resources"
     if (gatlingConfig.hasPath(path)) {
       gatlingConfig.getString(path)
     } else {
-      "user-files/data"
+      "user-files/resources"
     }
   }
 }

@@ -2,8 +2,8 @@ enablePlugins(GatlingPlugin, JavaAppPackaging, GatlingRemotePlugin)
 
 //scalaVersion := "2.12.3"
 
-libraryDependencies += "io.gatling.highcharts" % "gatling-charts-highcharts" % "2.3.0"
-libraryDependencies += "io.gatling" % "gatling-test-framework" % "2.3.0"
+libraryDependencies += "io.gatling.highcharts" % "gatling-charts-highcharts" % "3.0.0-RC1"
+libraryDependencies += "io.gatling" % "gatling-test-framework" % "3.0.0-RC1"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4"
 
 gatlingConfigFilePath in Gatling := (resourceDirectory in Compile).value / "gatling.conf"

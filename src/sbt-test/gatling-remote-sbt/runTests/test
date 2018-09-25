@@ -10,8 +10,8 @@ $ exists target/universal/stage/conf/application.conf
 $ exists target/universal/stage/target/scala-2.12/gatling-classes/basic/BasicExampleSimulationFails.class
 $ exists target/universal/stage/target/scala-2.12/gatling-classes/basic/BasicExampleSimulationSucceeds.class
 $ exists target/universal/stage/target/scala-2.12/gatling-classes/unit/Spec.class
-$ exists target/universal/stage/user-files/data/users.csv
-$ exists target/universal/stage/user-files/data/files/users.csv
+$ exists target/universal/stage/user-files/resources/users.csv
+$ exists target/universal/stage/user-files/resources/files/users.csv
 $ exec unzip target/universal/stage/lib/default.runtests-0.1.0-SNAPSHOT.jar -d target/universal/stage/lib/default.runtests-0.1.0-SNAPSHOT
 $ absent target/universal/stage/lib/default.runtests-0.1.0-SNAPSHOT/gatling.conf
 $ absent target/universal/stage/lib/default.runtests-0.1.0-SNAPSHOT/gatling-akka.conf
@@ -29,8 +29,8 @@ $ copy-file src/main/resources/gatling_test1.conf src/main/resources/gatling.con
 
 > gatling:assembleProject
 # $ pause
-$ exists target/universal/stage/user-files/data1/users.csv
-$ exists target/universal/stage/user-files/data1/files/users.csv
+$ exists target/universal/stage/user-files/resources1/users.csv
+$ exists target/universal/stage/user-files/resources1/files/users.csv
 
 
 
