@@ -16,8 +16,8 @@ We mimic gatling-sbt versioning. For our purposes we use fourth digit in version
 
 `plugins.sbt`
 ```scala
-addSbtPlugin("ru.pravo" %% "gatling-remote-sbt" % "2.2.2.3")
-addSbtPlugin("com.typesafe.sbt" %% "sbt-native-packager" % "1.3.2")
+addSbtPlugin("ru.pravo" %% "gatling-remote-sbt" % "3.0.0.0-RC1")
+addSbtPlugin("com.typesafe.sbt" %% "sbt-native-packager" % "1.3.6")
 addSbtPlugin("io.gatling" %% "gatling-sbt" % "2.2.2")
 ```
 
