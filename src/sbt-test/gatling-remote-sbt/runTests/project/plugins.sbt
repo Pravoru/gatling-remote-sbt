@@ -6,5 +6,5 @@
   else addSbtPlugin("ru.pravo" % "gatling-remote-sbt" % pluginVersion)
 }
 addSbtPlugin("com.typesafe.sbt" %% "sbt-native-packager" % "1.3.2")
-addSbtPlugin("io.gatling" %% "gatling-sbt" % "2.2.2")
+addSbtPlugin("io.gatling" %% "gatling-sbt" % "3.0.0")
 

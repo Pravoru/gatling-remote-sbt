@@ -2,12 +2,12 @@ name := "gatling-remote-sbt"
 
 organization := "ru.pravo"
 
-version := "3.0.0.0-RC1"
+version := "3.0.0.0"
 
 sbtPlugin := true
 
 addSbtPlugin("com.typesafe.sbt" %% "sbt-native-packager" % "1.3.6")
-addSbtPlugin("io.gatling" %% "gatling-sbt" % "2.2.2")
+addSbtPlugin("io.gatling" %% "gatling-sbt" % "3.0.0")
 
 enablePlugins(SbtPlugin)
 
