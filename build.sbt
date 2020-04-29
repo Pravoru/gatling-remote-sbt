@@ -2,7 +2,7 @@ name := "gatling-remote-sbt"
 
 organization := "ru.pravo"
 
-version := "3.0.0.0"
+version := "3.0.0.1"
 
 sbtPlugin := true
 

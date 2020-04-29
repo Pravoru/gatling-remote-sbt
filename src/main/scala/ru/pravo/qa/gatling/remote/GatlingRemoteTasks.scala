@@ -79,12 +79,19 @@ object GatlingRemoteTasks {
       SSHHelper.runCommand(s"rm -rf $workDirectory/$projectName")
     }
 
+    def createDestinationDirectoryFutureList = sshClientsList.map { implicit ssh ⇒
+      SSHHelper.runCommand(s"mkdir -p  $workDirectory/$projectName")
+    }
+
     def uploadFutureList = sshClientsList.map { implicit ssh ⇒
       SSHHelper.uploadFile(assembledDirectory, s"$workDirectory/$projectName")
     }
 
     val cleanDestinationFuture = Future.sequence(cleanDestinationFutureList)
     Await.ready(cleanDestinationFuture, timeout)
+
+    val createDestinationDirectoryFuture = Future.sequence(createDestinationDirectoryFutureList)
+    Await.ready(createDestinationDirectoryFuture, timeout)
 
     val uploadFuture = Future.sequence(uploadFutureList)
     Await.ready(uploadFuture, timeout)
@@ -103,7 +110,7 @@ object GatlingRemoteTasks {
 
     def runLoadTestList = sshClientsList.map { implicit ssh ⇒
       SSHHelper.runCommand(
-        s"cd $workDirectory/$projectName/bin/ && sh run.sh -s $simulationName > log.txt 2>&1"
+        s"cd $workDirectory/$projectName/bin/ && sed -i 's/\r$$//' $workDirectory/$projectName/bin/run.sh && sh run.sh -s $simulationName > log.txt 2>&1"
       )
     }
 

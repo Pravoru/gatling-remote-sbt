@@ -50,4 +50,5 @@ COMPILATION_CLASSPATH=`find "$GATLING_HOME/lib" -maxdepth 1 -name "*.jar" -type 
 # Do not run compiler
 #"$JAVA" $COMPILER_OPTS -cp "$COMPILER_CLASSPATH" io.gatling.compiler.ZincCompiler -ccp "$COMPILATION_CLASSPATH" "$@"  2> /dev/null
 # Run Gatling
-"$JAVA" $DEFAULT_JAVA_OPTS $JAVA_OPTS -Dgatling.data.graphite.rootPathPrefix=grafiteRootPathPrefix.$HOSTNAME -cp "$GATLING_CLASSPATH" io.gatling.app.Gatling "$@"
+HOSTNAME=`uname -n`
+"$JAVA" $DEFAULT_JAVA_OPTS $JAVA_OPTS -Dgatling.data.graphite.rootPathPrefix=grafiteRootPathPrefix.${HOSTNAME} -cp "$GATLING_CLASSPATH" io.gatling.app.Gatling "$@"
